@@ -31,6 +31,10 @@ remain owned by application teams.
     role-assignment permission required by approved workload profiles
 - An existing Azure Storage backend for remote state
 
+The included state bootstrap denies network access by default. Supply trusted
+runner egress CIDRs or subnets, or use a private runner. A GitHub-hosted runner
+cannot reach a private backend unless its network path is explicitly designed.
+
 The deploying identity must be able to read the tenant root management group.
 By default, the hierarchy is created directly below the tenant root. Set
 `parent_management_group_id` to place it below another existing management

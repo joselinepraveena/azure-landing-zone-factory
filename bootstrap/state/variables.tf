@@ -26,6 +26,18 @@ variable "replication_type" {
   }
 }
 
+variable "allowed_ip_rules" {
+  type        = list(string)
+  description = "Trusted public IPv4 addresses or CIDR ranges allowed to reach state."
+  default     = []
+}
+
+variable "allowed_subnet_ids" {
+  type        = list(string)
+  description = "Trusted Azure subnet resource IDs allowed to reach state."
+  default     = []
+}
+
 variable "tags" {
   type        = map(string)
   description = "Bootstrap resource tags."
