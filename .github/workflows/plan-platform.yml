@@ -1,0 +1,48 @@
+name: Plan platform
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target configuration
+        type: choice
+        options: [lab]
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}-plan
+    env:
+      TF_VAR_default_location: ${{ vars.AZURE_DEFAULT_LOCATION }}
+      TF_VAR_platform_subscription_ids: ${{ vars.PLATFORM_SUBSCRIPTION_IDS_JSON }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.15.8"
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_PLAN_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Initialize remote state
+        run: >-
+          terraform -chdir=platform/alz init
+          -backend-config="resource_group_name=${{ vars.TFSTATE_RESOURCE_GROUP }}"
+          -backend-config="storage_account_name=${{ vars.TFSTATE_STORAGE_ACCOUNT }}"
+          -backend-config="container_name=${{ vars.TFSTATE_CONTAINER }}"
+          -backend-config="key=platform/${{ inputs.environment }}.tfstate"
+          -backend-config="use_oidc=true"
+          -backend-config="use_azuread_auth=true"
+      - name: Create reviewed plan
+        run: terraform -chdir=platform/alz plan -out=platform.tfplan
+      - uses: actions/upload-artifact@v4
+        with:
+          name: platform-${{ inputs.environment }}-plan
+          path: platform/alz/platform.tfplan
+          retention-days: 1

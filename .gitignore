@@ -1,0 +1,23 @@
+# Terraform working data and sensitive local inputs
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+*.tfvars
+!*.tfvars.example
+
+# Terraform CLI overrides
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Local tooling
+.env
+.idea/
+.vscode/
+.DS_Store
+__pycache__/
+*.py[cod]

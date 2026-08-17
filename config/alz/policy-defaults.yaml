@@ -1,0 +1,21 @@
+allowed_locations:
+  - eastus2
+  - centralus
+mandatory_tags:
+  - Application
+  - CostCenter
+  - DataClassification
+  - Environment
+  - ExpirationDate
+  - ManagedBy
+  - Owner
+rollout:
+  default_effect: Audit
+  deny_requires:
+    - canary_plan
+    - impact_review
+    - remediation_runbook
+public_access:
+  default_effect: Audit
+diagnostics:
+  activity_logs_to_central_workspace: true

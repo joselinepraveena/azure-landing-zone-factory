@@ -1,0 +1,11 @@
+default_location                 = "eastus2"
+parent_management_group_id       = null
+manage_tenant_hierarchy_settings = false
+enable_telemetry                 = false
+
+platform_subscription_ids = {
+  connectivity = "00000000-0000-0000-0000-000000000001"
+  identity     = "00000000-0000-0000-0000-000000000002"
+  management   = "00000000-0000-0000-0000-000000000003"
+  security     = "00000000-0000-0000-0000-000000000004"
+}

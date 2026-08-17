@@ -1,0 +1,44 @@
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.15.8"
+      - name: Check formatting
+        run: terraform fmt -check -recursive
+      - name: Validate platform root
+        run: terraform -chdir=platform/alz init -backend=false && terraform -chdir=platform/alz validate
+      - name: Validate vending root
+        run: terraform -chdir=platform/vending init -backend=false && terraform -chdir=platform/vending validate
+
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Validate sample requests
+        run: python3 scripts/validate-request.py config/vending-requests/sample-sandbox.json
+      - name: Run contract tests
+        run: python3 -m unittest discover -s tests -p "test_*.py"
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: config
+          scan-ref: .
+          exit-code: "1"
+          severity: HIGH,CRITICAL

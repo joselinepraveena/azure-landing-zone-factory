@@ -1,0 +1,27 @@
+name: alz
+source:
+  module: Azure/avm-ptn-alz/azurerm
+  version: 0.21.0
+  library: platform/alz
+  library_version: 2026.04.2
+hierarchy:
+  alz:
+    children:
+      - platform
+      - landingzones
+      - sandbox
+      - decommissioned
+  platform:
+    children:
+      - connectivity
+      - identity
+      - management
+      - security
+  landingzones:
+    children:
+      - corp
+      - online
+      - local
+policy_rollout:
+  initial_mode: audit
+  enforcement_requires_canary_evidence: true

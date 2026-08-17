@@ -1,0 +1,53 @@
+name: Deploy subscription vending
+
+on:
+  workflow_dispatch:
+    inputs:
+      request_file:
+        description: Repository-relative request JSON
+        required: true
+        type: string
+      environment:
+        description: Protected target
+        type: choice
+        options: [lab]
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}-apply
+    env:
+      REQUEST_FILE: ${{ inputs.request_file }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.15.8"
+      - name: Validate immutable request
+        run: |
+          case "$REQUEST_FILE" in config/vending-requests/*.json) ;; *) exit 2 ;; esac
+          python3 scripts/validate-request.py "$REQUEST_FILE"
+          echo "SUBSCRIPTION_ID=$(jq -r .subscription_id "$REQUEST_FILE")" >> "$GITHUB_ENV"
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_APPLY_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Initialize remote state
+        run: >-
+          terraform -chdir=platform/vending init
+          -backend-config="resource_group_name=${{ vars.TFSTATE_RESOURCE_GROUP }}"
+          -backend-config="storage_account_name=${{ vars.TFSTATE_STORAGE_ACCOUNT }}"
+          -backend-config="container_name=${{ vars.TFSTATE_CONTAINER }}"
+          -backend-config="key=vending/${SUBSCRIPTION_ID}.tfstate"
+          -backend-config="use_oidc=true"
+          -backend-config="use_azuread_auth=true"
+      - name: Recreate plan after protected-environment approval
+        run: terraform -chdir=platform/vending plan -var="request_file=../../${REQUEST_FILE}" -out=vending.tfplan
+      - name: Apply subscription profile
+        run: terraform -chdir=platform/vending apply -auto-approve vending.tfplan

@@ -1,1 +1,9 @@
+Azure Landing Zone Factory
+==========================
 
+This repository provides a reusable Terraform factory for an Azure platform
+landing zone. It creates a Cloud Adoption Framework-aligned management group
+hierarchy, places subscriptions in the hierarchy, applies baseline policy
+guardrails, and can create a central operations workspace.
+
+See [README.md](README.md) for setup and usage.
