@@ -83,7 +83,7 @@ inherited policy and access and therefore requires explicit plan review.
 
 Create `lab-plan` and reviewer-protected `lab-apply` environments. Configure:
 
-**Repository variables**
+### Repository variables
 
 - `AZURE_PLAN_CLIENT_ID`
 - `AZURE_APPLY_CLIENT_ID`
