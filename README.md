@@ -105,8 +105,10 @@ after approval in the selected GitHub environment.
 
 ## Design notes
 
-Start with [the architecture walkthrough](docs/architecture/overview.md), then
-review [ADR 0001](docs/decisions/0001-use-avm-alz.md) and the
+Start with the [step-by-step repository guide](docs/repository-guide.md) for a
+simple folder-by-folder explanation, usage instructions, and data flows. Then
+review [the architecture walkthrough](docs/architecture/overview.md),
+[ADR 0001](docs/decisions/0001-use-avm-alz.md), and the
 [operations runbook](docs/runbooks/operations.md).
 
 ## Safety
