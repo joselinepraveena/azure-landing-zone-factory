@@ -83,7 +83,7 @@ inherited policy and access and therefore requires explicit plan review.
 
 Create `lab-plan` and reviewer-protected `lab-apply` environments. Configure:
 
-**Repository variables**
+### Repository variables
 
 - `AZURE_PLAN_CLIENT_ID`
 - `AZURE_APPLY_CLIENT_ID`
@@ -105,9 +105,14 @@ after approval in the selected GitHub environment.
 
 ## Design notes
 
-Start with [the architecture walkthrough](docs/architecture/overview.md), then
-review [ADR 0001](docs/decisions/0001-use-avm-alz.md) and the
+Start with the [step-by-step repository guide](docs/repository-guide.md) for a
+simple folder-by-folder explanation, usage instructions, and data flows. Then
+review [the architecture walkthrough](docs/architecture/overview.md),
+[ADR 0001](docs/decisions/0001-use-avm-alz.md), and the
 [operations runbook](docs/runbooks/operations.md).
+
+For broader interview and design preparation, download the
+[Enterprise Cloud Engineer Azure Concepts and Q&A Word guide](docs/Enterprise_Cloud_Engineer_Azure_Concepts_and_QA.docx).
 
 ## Safety
 
