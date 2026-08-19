@@ -111,6 +111,9 @@ review [the architecture walkthrough](docs/architecture/overview.md),
 [ADR 0001](docs/decisions/0001-use-avm-alz.md), and the
 [operations runbook](docs/runbooks/operations.md).
 
+For broader interview and design preparation, download the
+[Enterprise Cloud Engineer Azure Concepts and Q&A Word guide](docs/Enterprise_Cloud_Engineer_Azure_Concepts_and_QA.docx).
+
 ## Safety
 
 - Start in a non-production tenant or below a dedicated parent management group.
